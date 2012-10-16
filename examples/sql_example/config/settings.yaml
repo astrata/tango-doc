@@ -1,0 +1,12 @@
+## Server configuration
+server:
+  bind: 0.0.0.0     # Listen on all interfaces.
+  port: 8080        # Listen on port 8080.
+
+datasource:
+  default:
+    driver: "mongo"
+    host: 127.0.0.1
+    database: "tango_dev"
+    user: tango
+    password: pass

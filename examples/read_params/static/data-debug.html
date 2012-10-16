@@ -1,0 +1,19 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <iframe name="debug" width="500" height="200" src="about:blank"></iframe>
+
+    <form target="debug" method="post" action="/data/debug/one/two/three?test_text_get=The_Same" enctype="multipart/form-data">
+      <label>
+        Text field:
+        <input type="text" name="test_text" value="Lorem ipsum" />
+      </label>
+      <label>
+        File:
+        <input type="file" name="test_file" />
+      </label>
+      <button type="submit">Send</button>
+    </form>
+  </body>
+</html>

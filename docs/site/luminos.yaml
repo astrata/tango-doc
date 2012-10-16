@@ -1,0 +1,12 @@
+page:
+  brand: "Tango"
+  head:
+    title: "Tango! a sane framework for writing APIs for the web"
+  body:
+    title: "Luminos project"
+    menu:
+      - { text: "Tutorial", url: "/tutorial" }
+      - { text: "Reference", url: "/reference" }
+      - { text: "Source code", url: "/source-code" }
+    menu_pull:
+      - { text: "Home", url: "/" }
