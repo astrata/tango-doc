@@ -126,14 +126,14 @@ Run your example project with `tango run`
 2012/10/15 15:38:21 Initializing server...
 2012/10/15 15:38:21 Adding fallback: /
 
-2012/10/15 15:38:21 [::]:8080 is ready to dance.
+2012/10/15 15:38:21 [::]:9292 is ready to dance.
 2012/10/15 15:38:21 Stop server with ^C.
 
 ```
 
-This will create an standalone server (by default) listening on any interface on the `8080` port.
+This will create an standalone server (by default) listening on any interface on the `9292` port.
 
-Open a browser to http://localhost:8080 to see your first *Tango!* app :-).
+Open a browser to http://localhost:9292 to see your first *Tango!* app :-).
 
 ## Models
 
@@ -202,7 +202,7 @@ func (self *Hello) Index() string {
 }
 ```
 
-Try to save it as `src/models/hello.go`, run the `tango run` command and visit http://locahost:8080/hello.
+Try to save it as `src/models/hello.go`, run the `tango run` command and visit http://locahost:9292/hello.
 
 ## Routes
 
@@ -266,18 +266,9 @@ init() {
 
 ## HTTP Parameters
 
-There are two optional structures that you can define in your model if you want to access `GET` and `POST` values.
+*Tango!* mixes `POST` and `GET` variables into a single struct, `POST` variables take precedence over `GET` variables.
 
-```go
-# import "github.com/astrata/tango"
-
-struct User {
-  Get tango.Value
-  Post tango.Value
-}
-```
-
-And there's a third one that will return `POST` or `GET` values (if the former is `nil`).
+Just add the line `Params tango.Value` to your model `struct`.
 
 ```go
 # import "github.com/astrata/tango"
@@ -287,21 +278,20 @@ struct User {
 }
 ```
 
-For example, let's consider the `(*User)Add()`, this is how you could retrieve values from `POST` requests:
+This is an example on how you could retrieve values from `POST` requests:
 
 ```go
+# import "github.com/gosexy/to"
+
 func (self *User) Add() string {
-  email := self.Post.String("email")
+  email := self.Params.Get("email")
   return fmt.Sprintf("Hello %s!\n", email)
 }
 ```
 
 ## Data validation
 
-Given that you can use HTTP `GET` and `POST` variables in your model you may want to add restrictions
-on the data the user sends.
-
-*Tango!* provides helper methods for filtering and validating input values.
+*Tango!* provides methods for filtering and validating input values.
 
 ### Filtering input variables
 
@@ -312,13 +302,13 @@ a reduced set of variables as application parameters.
 func (self *User) Add() string {
 
   // the "post" variable will be a tango.Value that only knows "email" and "name".
-  post := self.Post.Filter(
+  filtered := self.Params.Filter(
     "email",
     "name",
   )
 
-  email := post.String("email")
-  name  := post.String("name")
+  email := filtered.Get("email")
+  name  := filtered.Get("name")
 
   return fmt.Sprintf("Hello %s <%s>!\n", name, email)
 }
@@ -515,7 +505,7 @@ import (
 	"testing"
 )
 
-var service = rest.New("http://localhost:8080")
+var service = rest.New("http://localhost:9292")
 
 func init() {
 	rest.Debug = true
@@ -552,7 +542,7 @@ YAML is a really simple markup language that stores settings in human-readable p
 ## Server configuration
 server:
   bind: 0.0.0.0     # Listen on all interfaces.
-  port: 8080        # Listen on port 8080.
+  port: 9292        # Listen on port 9292.
 ```
 
 If you're in the need of editing some settings please refer to the `config/settings.yaml` file and look for the
