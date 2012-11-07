@@ -8,6 +8,7 @@ import (
 	"github.com/gosexy/canvas"
 	"github.com/gosexy/checksum"
 	"github.com/gosexy/resource"
+	"github.com/gosexy/to"
 	"os"
 	"path"
 	"strconv"
@@ -32,16 +33,19 @@ func (self *Image) StartUp() {
 func (self *Image) Resize(size string) {
 	var err error
 
-	url := self.Params.GetString("url")
+	url := to.String(self.Params.Get("url"))
 
 	relPath := ImageRoot + tango.PS + size + tango.PS + checksum.String(fmt.Sprintf("%s/%s", size, url), crypto.SHA1) + ".png"
-	fullPath := staticRoot + tango.PS + relPath
+	fullPath := Root + tango.PS + relPath
 
 	_, err = os.Stat(fullPath)
 
 	if err == nil {
 
 		app.Server.Context.Redirect("/" + relPath)
+
+		app.Server.Context.HttpError(200)
+
 		return
 
 	} else {
